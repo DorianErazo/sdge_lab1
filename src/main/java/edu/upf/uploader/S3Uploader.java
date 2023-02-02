@@ -1,16 +1,26 @@
 package edu.upf.uploader;
 
+//Imports for amazon aws  s3
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+
 import java.util.List;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.io.*;
-import com.amazonaws.services.s3.*;
+//import com.amazonaws.services.s3.*;
 
 public class S3Uploader implements Uploader {
     final String bucket;
     final String prefix;
-    final String profile;
+    //final String profile;
+    final AmazonS3 Client;
 
-    public S3Uploader(String bucket, String prefix, String profile){
+    public S3Uploader(String bucket, String prefix, String Client){
+        /*
+        ------------ Alex y Guillem ------------
+
         String raw_bucket[] = bucket.split("/");
         this.bucket = raw_bucket[2];
         String prefix_list[] = Arrays.copyOfRange(raw_bucket, 3, raw_bucket.length-1);
@@ -18,13 +28,33 @@ public class S3Uploader implements Uploader {
         this.profile = profile;
 
         System.out.println("Bucket: " + this.bucket + " Prefix: " + this.prefix);
+        */
+        //Para implementar esto necesitamos 3 variables. Las informacion la saco de 
+        //https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/s3/AmazonS3ClientBuilder.html
+        // https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/java/example_code/s3/src/main/java/aws/example/s3
 
-
-
+        this.bucket = bucket;
+        this.prefix = prefix;
+        this.Client = AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
 
     }
 
     @Override
+    public void upload(List<String> files) {
+        for (String file : files) {
+            System.out.format("Uploading file: %s, to AWS S3 bucket: %s.\n", file, bucket);
+            try {
+                Client.putObject(bucket, prefix , new File(file));
+            } catch (AmazonServiceException e) {
+                System.err.println(e.getErrorMessage());
+                System.exit(1);
+            }
+
+        }
+    }
+    /*
+        ------------ Alex y Guillem ------------
+    
     public void upload(List<String> files) {
         // First it creates a Client Connection
         // Credentials are assigned
@@ -32,6 +62,8 @@ public class S3Uploader implements Uploader {
             "ASIAZHVQRA4MNAEM7QO6", 
             "P33J/963VyVwCJvaBel01cLhGRXGHYJxMuqEfgaQ"
             );
+
+            
         // Create an instance of an AmazonS3 with the previous credentials
         AmazonS3 s3client = AmazonS3Builder
             .standard()
@@ -47,6 +79,7 @@ public class S3Uploader implements Uploader {
 
     }
 
+     
     public String getBucket() {
         return bucket;
     }
@@ -56,4 +89,5 @@ public class S3Uploader implements Uploader {
     public String getProfile() {
         return profile;
     }
+    */
 }

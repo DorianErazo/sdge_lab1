@@ -8,10 +8,12 @@ import edu.upf.parser.SimplifiedTweet;
 public class FileLanguageFilter {
     final String inputFile;
     final String outputFile;
+    int outputFileSize;
 
     public FileLanguageFilter(String inFile, String outFile) {
         this.inputFile = inFile;
         this.outputFile = outFile;
+        outputFileSize = 0;
     }
 
     public void filterLanguage(String language) throws Exception {
@@ -48,4 +50,9 @@ public class FileLanguageFilter {
     public String getOutputFile() {
         return this.outputFile;
     }
+
+    public int getOutputFileSize(){
+        return outputFileSize;
+    }
+
 }

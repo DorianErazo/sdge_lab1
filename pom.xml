@@ -91,6 +91,13 @@
         <version>3.2.1</version>
         <configuration>
           <!-- put your configurations here if need be -->
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>upf.edu.TwitterFilter</mainClass>
+            </manifest>
+          </archive>
+          <!-- configuration -->
         </configuration>
         <executions>
           <execution>

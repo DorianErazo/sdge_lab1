@@ -9,6 +9,9 @@ import java.util.List;
 
 public class TwitterFilter {
     public static void main( String[] args ) throws IOException {
+        long startTime = System.currentTimeMillis();
+        int outputSize = 0;
+
         List<String> argsList = Arrays.asList(args);
         String language = argsList.get(0);
         String outputFile = argsList.get(1);
@@ -17,6 +20,7 @@ public class TwitterFilter {
         for(String inputFile: argsList.subList(3, argsList.size())) {
             System.out.println("Processing: " + inputFile);
             final FileLanguageFilter filter = new FileLanguageFilter(inputFile, outputFile);
+            outputSize += filter.getOutputFileSize();
             try{
                 filter.filterLanguage(language);
             }
@@ -27,5 +31,11 @@ public class TwitterFilter {
 
         final S3Uploader uploader = new S3Uploader(bucket, "prefix", "upf");
         uploader.upload(Arrays.asList(outputFile));
+
+        // Variables para el benchmark
+        long endTime = System.currentTimeMillis();
+        long time =  endTime - startTime;
+
+        System.out.println("In language " + language + " has filtered " + outputSize + ". And the execution time is " + time + " ms.");
     }
 }
