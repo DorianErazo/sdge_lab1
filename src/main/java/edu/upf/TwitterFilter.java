@@ -20,9 +20,9 @@ public class TwitterFilter {
         for(String inputFile: argsList.subList(3, argsList.size())) {
             System.out.println("Processing: " + inputFile);
             final FileLanguageFilter filter = new FileLanguageFilter(inputFile, outputFile);
-            outputSize += filter.getOutputFileSize();
             try{
                 filter.filterLanguage(language);
+                outputSize = filter.getOutputFileSize();
             }
             catch(Exception e){
                 e.printStackTrace();

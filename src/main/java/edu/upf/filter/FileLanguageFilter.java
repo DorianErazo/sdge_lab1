@@ -13,7 +13,7 @@ public class FileLanguageFilter {
     public FileLanguageFilter(String inFile, String outFile) {
         this.inputFile = inFile;
         this.outputFile = outFile;
-        outputFileSize = 0;
+        this.outputFileSize = 0;
     }
 
     public void filterLanguage(String language) throws Exception {
@@ -23,6 +23,7 @@ public class FileLanguageFilter {
             BufferedWriter bw = new BufferedWriter(fw);
             String line = br.readLine(); // Read one line of content
             while (line != null) {
+                // Filter the line read to write the contents of the simplified tweet into the output file, if any element is null it won't print the tweet
                 if (line.length() != 0){
                     Optional<SimplifiedTweet> parsedLine = SimplifiedTweet.fromJson(line);
                     Long displayTweetId = parsedLine.map(SimplifiedTweet::getTweetId).orElse(null);
@@ -31,7 +32,9 @@ public class FileLanguageFilter {
                     String displayName = parsedLine.map(SimplifiedTweet::getUserName).orElse(null);
                     String displayLang = parsedLine.map(SimplifiedTweet::getLanguage).orElse(null);
                     Long displayTimestampMs = parsedLine.map(SimplifiedTweet::getTimestampMs).orElse(null);
-                    if (displayLang.equals(language)) {
+                    if (displayTweetId != null && displayText != null && displayUserId != null && displayName != null 
+                        && displayLang != null  && displayTimestampMs != null && displayLang.equals(language)) {
+                        addOutputFileSize();
                         String simpletweet = "TweetId: " + displayTweetId + " Text: " + displayText + " UserId: " + displayUserId + " Name: " + displayName + " lang: " + displayLang + " TimestampMS: " + displayTimestampMs + "\n";
                         bw.write(simpletweet);
                     }
@@ -45,6 +48,7 @@ public class FileLanguageFilter {
         } // Resources will be automatically closed
     }
 
+    // Basic functions for the class
     public String getInputFile() {
         return this.inputFile;
     }
@@ -53,8 +57,12 @@ public class FileLanguageFilter {
         return this.outputFile;
     }
 
+    public void addOutputFileSize(){
+        this.outputFileSize += 1;
+    }
+
     public int getOutputFileSize(){
-        return outputFileSize;
+        return this.outputFileSize;
     }
 
 }
