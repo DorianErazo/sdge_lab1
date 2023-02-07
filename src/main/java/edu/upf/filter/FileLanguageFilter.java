@@ -16,10 +16,10 @@ public class FileLanguageFilter {
         this.outputFileSize = 0;
     }
 
-    public void filterLanguage(String language) throws Exception {
+    public void filterLanguage(String language, boolean append_file) throws Exception {
         String input = this.getInputFile();
         try (FileReader fr = new FileReader(input); BufferedReader br = new BufferedReader(fr);) {
-            FileWriter fw = new FileWriter(outputFile);
+            FileWriter fw = new FileWriter(outputFile, append_file);
             BufferedWriter bw = new BufferedWriter(fw);
             String line = br.readLine(); // Read one line of content
             while (line != null) {

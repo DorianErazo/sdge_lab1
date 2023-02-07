@@ -11,6 +11,7 @@ public class TwitterFilter {
     public static void main( String[] args ) throws IOException {
         long startTime = System.currentTimeMillis();
         int outputSize = 0;
+        boolean append_file = false; // variable to control when the program has to append the contents or not.
 
         List<String> argsList = Arrays.asList(args);
         String language = argsList.get(0);
@@ -19,16 +20,18 @@ public class TwitterFilter {
         System.out.println("Language: " + language + ". Output file: " + outputFile + ". Destination bucket: " + bucket);
         for(String inputFile: argsList.subList(3, argsList.size())) {
             System.out.println("Processing: " + inputFile);
+            // Creates an instance of a FileLanguageFilter and filters every tweet for each file
             final FileLanguageFilter filter = new FileLanguageFilter(inputFile, outputFile);
             try{
-                filter.filterLanguage(language);
-                outputSize = filter.getOutputFileSize();
+                filter.filterLanguage(language, append_file);
+                append_file = true;
+                outputSize += filter.getOutputFileSize();
             }
             catch(Exception e){
                 e.printStackTrace();
             }
         }
-
+        // When the final output is finished we upload it to the AWS S3 bucket
         final S3Uploader uploader = new S3Uploader(bucket, "prefix", "upf");
         uploader.upload(Arrays.asList(outputFile));
 
