@@ -113,6 +113,12 @@
         <executions>
           <execution>
             <phase>package</phase>
+            <configuration>
+              <path>/</path>
+              <enableNaming>false</enableNaming>
+              <finalName>lab1</finalName>
+              <charset>UTF-8</charset>
+            </configuration>
             <goals>
               <goal>shade</goal>
             </goals>
