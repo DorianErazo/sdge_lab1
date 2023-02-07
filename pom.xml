@@ -33,23 +33,6 @@
     <!-- ADDED AWS-SDK-S3 DEPENDENCY-->
 
     <dependency>
-      <groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
-      <version>2.3.1</version>
-    </dependency>
-
-    <dependency>
-        <groupId>org.glassfish.jaxb</groupId>
-        <artifactId>jaxb-runtime</artifactId>
-        <version>3.0.0</version>
-    </dependency>
-    <dependency>
-        <groupId>org.glassfish.jaxb</groupId>
-        <artifactId>jaxb-core</artifactId>
-        <version>3.0.0</version>
-    </dependency>
-
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
@@ -108,6 +91,17 @@
         <version>3.2.1</version>
         <configuration>
           <!-- put your configurations here if need be -->
+          <filters>
+            <filter>
+                <artifact>*:*</artifact>
+                <excludes>
+                    <exclude>module-info.class</exclude>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                </excludes>
+            </filter>
+        </filters>
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
